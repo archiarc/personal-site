@@ -5,6 +5,7 @@
       "id": "about",
       "icon": "👋",
       "title": "About Me",
+      "pinned": true,
       "preview": "Hi, I'm Max. Serial entrepreneur, growth obsessive...",
       "date": "Jan 27, 2026",
       "tags": ["Personal", "Philosophy", "Life"],

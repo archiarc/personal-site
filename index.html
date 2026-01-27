@@ -231,6 +231,11 @@
             fill: var(--text-selected);
         }
 
+        .pin-icon {
+            font-size: 12px;
+            margin-right: 2px;
+        }
+
         /* Main Content */
         .main-content {
             flex: 1;
@@ -747,6 +752,10 @@
             const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
             const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
             
+            // Separate pinned notes
+            const pinnedNotes = notes.filter(note => note.pinned);
+            const unpinnedNotes = notes.filter(note => !note.pinned);
+            
             const groups = {
                 'Today': [],
                 'Previous 7 Days': [],
@@ -754,7 +763,7 @@
             };
             const yearGroups = {};
             
-            notes.forEach(note => {
+            unpinnedNotes.forEach(note => {
                 const noteDate = parseDate(note.date);
                 
                 if (noteDate >= today) {
@@ -773,6 +782,12 @@
             });
             
             const result = [];
+            
+            // Add pinned notes first
+            if (pinnedNotes.length > 0) {
+                result.push({ title: 'Pinned', notes: pinnedNotes, isPinned: true });
+            }
+            
             ['Today', 'Previous 7 Days', 'Previous 30 Days'].forEach(key => {
                 if (groups[key].length > 0) {
                     result.push({ title: key, notes: groups[key] });
@@ -820,10 +835,10 @@
             
             list.innerHTML = grouped.map(group => `
                 <div class="note-group">
-                    <div class="note-group-title">${group.title}</div>
+                    <div class="note-group-title">${group.isPinned ? '📌 ' : ''}${group.title}</div>
                     ${group.notes.map(note => `
                         <div class="note-item ${note.id === currentNoteId ? 'active' : ''}" data-note="${note.id}" onclick="selectNote('${note.id}')">
-                            <div class="note-title">${note.title}</div>
+                            <div class="note-title">${note.pinned ? '<span class="pin-icon">📌</span> ' : ''}${note.title}</div>
                             <div class="note-meta">
                                 <span class="note-date">${formatDateForList(note.date)}</span>
                                 <span class="note-preview">${note.preview}</span>
