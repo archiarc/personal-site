@@ -231,9 +231,9 @@
             fill: var(--text-selected);
         }
 
-        .pin-icon {
-            font-size: 12px;
-            margin-right: 2px;
+        .note-icon {
+            font-size: 14px;
+            margin-right: 4px;
         }
 
         /* Main Content */
@@ -838,7 +838,7 @@
                     <div class="note-group-title">${group.isPinned ? '📌 ' : ''}${group.title}</div>
                     ${group.notes.map(note => `
                         <div class="note-item ${note.id === currentNoteId ? 'active' : ''}" data-note="${note.id}" onclick="selectNote('${note.id}')">
-                            <div class="note-title">${note.pinned ? '<span class="pin-icon">📌</span> ' : ''}${note.title}</div>
+                            <div class="note-title">${note.icon ? '<span class="note-icon">' + note.icon + '</span> ' : ''}${note.title}</div>
                             <div class="note-meta">
                                 <span class="note-date">${formatDateForList(note.date)}</span>
                                 <span class="note-preview">${note.preview}</span>
