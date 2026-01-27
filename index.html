@@ -438,22 +438,171 @@
             color: var(--text-secondary);
         }
 
+        /* Mobile Header (hidden on desktop) */
+        .mobile-header {
+            display: none;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--bg-main);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mobile-back-btn {
+            background: none;
+            border: none;
+            padding: 8px;
+            margin: -8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--link);
+            font-size: 17px;
+            font-family: inherit;
+        }
+
+        .mobile-back-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--link);
+        }
+
+        .mobile-header-title {
+            flex: 1;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 60px; /* Balance the back button */
+        }
+
+        /* Mobile List Header */
+        .mobile-list-header {
+            display: none;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border);
+            padding: 16px;
+        }
+
+        .mobile-list-title {
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
         /* Mobile responsive */
         @media (max-width: 768px) {
+            .app {
+                flex-direction: column;
+            }
+
             .sidebar {
                 width: 100%;
+                height: 100%;
                 position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
                 z-index: 100;
                 transform: translateX(-100%);
-                transition: transform 0.3s;
+                transition: transform 0.3s ease;
             }
 
             .sidebar.open {
                 transform: translateX(0);
             }
 
+            .mobile-header {
+                display: flex;
+            }
+
+            .mobile-list-header {
+                display: block;
+            }
+
+            .main-content {
+                height: 100vh;
+                width: 100%;
+            }
+
+            .note-header {
+                display: none;
+            }
+
             .note-content {
-                padding: 20px;
+                padding: 16px;
+                padding-top: 8px;
+            }
+
+            .note-content h1 {
+                font-size: 24px;
+                margin-bottom: 16px;
+            }
+
+            .note-content h2 {
+                font-size: 18px;
+                margin: 20px 0 10px;
+            }
+
+            .note-content p {
+                font-size: 16px;
+            }
+
+            .sidebar-footer {
+                padding: 16px;
+            }
+
+            .note-group {
+                padding: 0 16px;
+            }
+
+            .note-item {
+                padding: 12px 14px;
+            }
+
+            .note-title {
+                font-size: 16px;
+            }
+
+            .note-meta {
+                font-size: 14px;
+            }
+
+            /* Details on mobile */
+            .note-content details {
+                margin: 8px 0;
+            }
+
+            .note-content summary {
+                padding: 12px 14px;
+                font-size: 16px;
+            }
+
+            .note-content details > *:not(summary) {
+                padding: 0 14px;
+            }
+        }
+        
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            .mobile-list-title {
+                font-size: 28px;
+            }
+            
+            .mobile-header-title {
+                font-size: 16px;
+                margin-right: 50px;
             }
         }
     </style>
@@ -461,6 +610,9 @@
 <body>
     <div class="app">
         <aside class="sidebar" id="sidebar">
+            <div class="mobile-list-header">
+                <div class="mobile-list-title">Notes</div>
+            </div>
             
             <div class="note-list-container" id="noteList">
                 <div class="loading">Loading notes...</div>
@@ -480,6 +632,13 @@
         </aside>
 
         <main class="main-content">
+            <div class="mobile-header" id="mobileHeader">
+                <button class="mobile-back-btn" onclick="showNoteList()">
+                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                    <span>Notes</span>
+                </button>
+                <div class="mobile-header-title" id="mobileHeaderTitle"></div>
+            </div>
             <div class="note-header" id="noteHeader"></div>
             <div class="note-content" id="noteContent">
                 <div class="loading">Select a note to view</div>
@@ -679,6 +838,18 @@
             `).join('');
         }
 
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+
+        function showNoteList() {
+            document.getElementById('sidebar').classList.add('open');
+        }
+
+        function hideNoteList() {
+            document.getElementById('sidebar').classList.remove('open');
+        }
+
         function selectNote(id) {
             currentNoteId = id;
             const note = notesData.notes.find(n => n.id === id);
@@ -690,6 +861,9 @@
             });
             
             document.getElementById('noteHeader').textContent = formatDateForHeader(note.date);
+            
+            // Update mobile header title
+            document.getElementById('mobileHeaderTitle').textContent = note.title;
             
             let html = `
                 <h1>${note.title}</h1>
@@ -720,6 +894,11 @@
             
             document.getElementById('noteContent').innerHTML = html;
             history.replaceState(null, '', '#' + id);
+            
+            // On mobile, hide the sidebar after selecting a note
+            if (isMobile()) {
+                hideNoteList();
+            }
         }
 
         function handleHash() {
@@ -729,13 +908,30 @@
             }
         }
 
+        // Handle mobile initial state
+        function initMobile() {
+            if (isMobile()) {
+                // On mobile, show the note list initially
+                showNoteList();
+            }
+        }
+
         // Initialize
         initTheme();
         loadNotes().then(() => {
             handleHash();
+            initMobile();
         });
 
         window.addEventListener('hashchange', handleHash);
+        
+        // Handle resize events
+        window.addEventListener('resize', () => {
+            if (!isMobile()) {
+                // On desktop, always hide the mobile sidebar overlay
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        });
     </script>
 </body>
 </html>
