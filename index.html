@@ -104,40 +104,6 @@
             transition: background 0.3s, border-color 0.3s;
         }
 
-        /* Sidebar Header with New Note button */
-        .sidebar-header {
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-        }
-
-        .new-note-btn {
-            background: var(--bg-hover);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 8px 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text);
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-
-        .new-note-btn:hover {
-            background: var(--btn-bg);
-            border-color: var(--btn-border);
-        }
-
-        .new-note-btn .icon {
-            font-size: 14px;
-        }
-
         /* Note list container */
         .note-list-container {
             flex: 1;
@@ -427,168 +393,6 @@
             margin: 28px 0;
         }
 
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.25s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal {
-            background: var(--modal-bg);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 24px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            transform: scale(0.95) translateY(10px);
-            transition: transform 0.25s ease, background 0.3s;
-        }
-
-        .modal-overlay.active .modal {
-            transform: scale(1) translateY(0);
-        }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .modal-header .icon {
-            font-size: 24px;
-        }
-
-        .modal-header h2 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .modal-disclaimer {
-            background: var(--modal-disclaimer-bg);
-            border: 1px solid var(--modal-disclaimer-border);
-            border-radius: 10px;
-            padding: 12px 14px;
-            margin-bottom: 16px;
-            font-size: 13px;
-            color: var(--modal-disclaimer-text);
-            line-height: 1.5;
-        }
-
-        .modal-disclaimer strong {
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .modal textarea {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 15px;
-            font-family: inherit;
-            resize: none;
-            outline: none;
-            background: var(--bg-main);
-            color: var(--text);
-            min-height: 150px;
-            line-height: 1.5;
-            transition: background 0.3s, border-color 0.3s, color 0.3s;
-        }
-
-        .modal textarea:focus {
-            border-color: var(--bg-selected);
-        }
-
-        .modal textarea::placeholder {
-            color: var(--text-secondary);
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 16px;
-        }
-
-        .modal-btn {
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .modal-btn-cancel {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text);
-        }
-
-        .modal-btn-cancel:hover {
-            background: var(--bg-hover);
-        }
-
-        .modal-btn-send {
-            background: var(--bg-selected);
-            border: none;
-            color: var(--text-selected);
-        }
-
-        .modal-btn-send:hover {
-            opacity: 0.9;
-        }
-
-        .modal-btn-send:disabled {
-            background: var(--bg-hover);
-            color: var(--text-secondary);
-            cursor: not-allowed;
-        }
-
-        /* Success state */
-        .modal-success {
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        .modal-success .icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .modal-success h3 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text);
-        }
-
-        .modal-success p {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
         /* Film grid */
         .film-grid {
             display: grid;
@@ -657,12 +461,6 @@
 <body>
     <div class="app">
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <button class="new-note-btn" onclick="openNoteModal()">
-                    <span class="icon">✏️</span>
-                    <span>New Note</span>
-                </button>
-            </div>
             
             <div class="note-list-container" id="noteList">
                 <div class="loading">Loading notes...</div>
@@ -689,31 +487,6 @@
         </main>
     </div>
 
-    <!-- Leave a Note Modal -->
-    <div class="modal-overlay" id="noteModal">
-        <div class="modal">
-            <div id="modalContent">
-                <div class="modal-header">
-                    <span class="icon">✏️</span>
-                    <h2>Leave a Note for Max</h2>
-                </div>
-                <div class="modal-disclaimer">
-                    <strong>🔒 Private note</strong>
-                    This note won't be public and won't appear on this site. Only Max Uper will see it. Feel free to share your thoughts, feedback, or just say hello!
-                </div>
-                <textarea id="visitorNote" placeholder="Write your message here..."></textarea>
-                <div class="modal-actions">
-                    <button class="modal-btn modal-btn-cancel" onclick="closeNoteModal()">Cancel</button>
-                    <button class="modal-btn modal-btn-send" id="sendBtn" onclick="sendNote()">Send Note</button>
-                </div>
-            </div>
-            <div id="modalSuccess" class="modal-success" style="display: none;">
-                <div class="icon">💛</div>
-                <h3>Note Sent!</h3>
-                <p>Thanks for your message. Max will see it soon.</p>
-            </div>
-        </div>
-    </div>
 
     <script>
         let notesData = { notes: [] };
@@ -955,50 +728,6 @@
                 selectNote(hash);
             }
         }
-
-        // Modal functions
-        function openNoteModal() {
-            document.getElementById('noteModal').classList.add('active');
-            document.getElementById('modalContent').style.display = 'block';
-            document.getElementById('modalSuccess').style.display = 'none';
-            document.getElementById('visitorNote').value = '';
-            document.getElementById('visitorNote').focus();
-        }
-
-        function closeNoteModal() {
-            document.getElementById('noteModal').classList.remove('active');
-        }
-
-        function sendNote() {
-            const noteText = document.getElementById('visitorNote').value.trim();
-            if (!noteText) return;
-            
-            const notes = JSON.parse(localStorage.getItem('visitorNotes') || '[]');
-            notes.push({
-                timestamp: new Date().toISOString(),
-                note: noteText
-            });
-            localStorage.setItem('visitorNotes', JSON.stringify(notes));
-            
-            document.getElementById('modalContent').style.display = 'none';
-            document.getElementById('modalSuccess').style.display = 'block';
-            
-            setTimeout(() => {
-                closeNoteModal();
-            }, 2000);
-        }
-
-        document.getElementById('noteModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeNoteModal();
-            }
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeNoteModal();
-            }
-        });
 
         // Initialize
         initTheme();
